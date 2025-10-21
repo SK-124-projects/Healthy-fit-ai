@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Healthy Fit Ai| Fleet Management Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #111827; /* Tailwind gray-900 */
+            color: #d1d5db; /* Tailwind gray-300 */
+        }
+        .card {
+            background-color: #1f2937; /* Tailwind gray-800 */
+            border: 1px solid #374151; /* Tailwind gray-700 */
+            border-radius: 0.75rem;
+        }
+        .modal-backdrop {
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+        /* Custom scrollbar for a better look in dark mode */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1f2937;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #4b5563;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #6b7280;
+        }
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+    </style>
+</head>
+<body class="p-4 sm:p-6 lg:p-8">
+
+    <div class="max-w-screen-2xl mx-auto">
+        <!-- Header -->
+        <header class="flex items-center justify-between pb-6 border-b border-gray-700">
+            <div>
+                <h1 class="text-2xl sm:text-3xl font-bold text-white">Healthy Fit Ai Dashboard</h1>
+                <p class="text-sm text-gray-400">Real-time Fleet & Operator Monitoring</p>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button class="p-2 rounded-full hover:bg-gray-700 transition">
+                    <i data-lucide="bell" class="w-5 h-5"></i>
+                </button>
+                <div class="flex items-center space-x-2">
+                    <img src="https://placehold.co/40x40/667eea/ffffff?text=FM" alt="Fleet Manager" class="rounded-full">
+                    <div class="hidden sm:block">
+                        <p class="text-white font-semibold">Mohit</p>
+                        <p class="text-xs text-gray-400">Fleet Manager</p>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="mt-6">
+            <!-- KPIs -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="card p-5 flex items-center">
+                    <div class="p-3 bg-blue-500/20 rounded-lg">
+                        <i data-lucide="users" class="w-6 h-6 text-blue-400"></i>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-gray-400 text-sm">Total Operators</p>
+                        <p class="text-2xl font-bold text-white">24</p>
+                    </div>
+                </div>
+                <div class="card p-5 flex items-center">
+                    <div class="p-3 bg-green-500/20 rounded-lg">
+                        <i data-lucide="truck" class="w-6 h-6 text-green-400"></i>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-gray-400 text-sm">Equipment Active</p>
+                        <p class="text-2xl font-bold text-white">18 / 22</p>
+                    </div>
+                </div>
+                <div class="card p-5 flex items-center">
+                    <div class="p-3 bg-yellow-500/20 rounded-lg">
+                        <i data-lucide="shield-alert" class="w-6 h-6 text-yellow-400"></i>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-gray-400 text-sm">Operator Alerts</p>
+                        <p class="text-2xl font-bold text-white">3</p>
+                    </div>
+                </div>
+                <div class="card p-5 flex items-center">
+                    <div class="p-3 bg-red-500/20 rounded-lg">
+                        <i data-lucide="wrench" class="w-6 h-6 text-red-400"></i>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-gray-400 text-sm">Maint. Warnings</p>
+                        <p class="text-2xl font-bold text-white">2</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dashboard Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
+                
+                <!-- Left Column -->
+                <div class="lg:col-span-2 flex flex-col gap-6">
+                    <!-- Operator Status -->
+                    <div class="card p-6 h-full">
+                        <h2 class="text-lg font-semibold text-white mb-4">Operator Status</h2>
+                        <div class="space-y-3 pr-2 overflow-y-auto" style="max-height: 300px;">
+                            <!-- Operator Row (Clickable) -->
+                            <div class="operator-row flex items-center p-3 rounded-lg hover:bg-gray-700/50 cursor-pointer transition" data-operator-id="1">
+                                <span class="status-dot bg-green-500"></span>
+                                <p class="ml-3 font-medium text-white flex-1">Rohan</p>
+                                <p class="text-sm text-gray-400 flex-1 hidden sm:block">Excavator EX-101</p>
+                                <div class="flex items-center justify-end w-24">
+                                    <p class="text-sm font-semibold text-green-400">92%</p>
+                                    <i data-lucide="trending-up" class="w-4 h-4 ml-1 text-green-400"></i>
+                                </div>
+                            </div>
+                            <!-- Operator Row (Clickable) -->
+                            <div class="operator-row flex items-center p-3 rounded-lg hover:bg-gray-700/50 cursor-pointer transition" data-operator-id="2">
+                                <span class="status-dot bg-yellow-500"></span>
+                                <p class="ml-3 font-medium text-white flex-1">Amith</p>
+                                <p class="text-sm text-gray-400 flex-1 hidden sm:block">Dozer DZ-203</p>
+                                <div class="flex items-center justify-end w-24">
+                                    <p class="text-sm font-semibold text-yellow-400">74%</p>
+                                    <i data-lucide="trending-down" class="w-4 h-4 ml-1 text-yellow-400"></i>
+                                </div>
+                            </div>
+                             <!-- Operator Row (Clickable) -->
+                            <div class="operator-row flex items-center p-3 rounded-lg hover:bg-gray-700/50 cursor-pointer transition" data-operator-id="3">
+                                <span class="status-dot bg-green-500"></span>
+                                <p class="ml-3 font-medium text-white flex-1">Manasa</p>
+                                <p class="text-sm text-gray-400 flex-1 hidden sm:block">Crane CR-05</p>
+                                <div class="flex items-center justify-end w-24">
+                                    <p class="text-sm font-semibold text-green-400">88%</p>
+                                    <i data-lucide="trending-up" class="w-4 h-4 ml-1 text-green-400"></i>
+                                </div>
+                            </div>
+                            <!-- Operator Row (Clickable) -->
+                           <div class="operator-row flex items-center p-3 rounded-lg hover:bg-gray-700/50 cursor-pointer transition" data-operator-id="4">
+                                <span class="status-dot bg-red-500"></span>
+                                <p class="ml-3 font-medium text-white flex-1">Sai</p>
+                                <p class="text-sm text-gray-400 flex-1 hidden sm:block">Loader LD-55</p>
+                                <div class="flex items-center justify-end w-24">
+                                    <p class="text-sm font-semibold text-red-400">62%</p>
+                                    <i data-lucide="trending-down" class="w-4 h-4 ml-1 text-red-400"></i>
+                                </div>
+                            </div>
+                             <!-- Operator Row (Clickable) -->
+                           <div class="operator-row flex items-center p-3 rounded-lg hover:bg-gray-700/50 cursor-pointer transition" data-operator-id="5">
+                                <span class="status-dot bg-green-500"></span>
+                                <p class="ml-3 font-medium text-white flex-1">Ram</p>
+                                <p class="text-sm text-gray-400 flex-1 hidden sm:block">Grader GR-78</p>
+                                <div class="flex items-center justify-end w-24">
+                                    <p class="text-sm font-semibold text-green-400">95%</p>
+                                    <i data-lucide="trending-up" class="w-4 h-4 ml-1 text-green-400"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Live Alerts -->
+                    <div class="card p-6">
+                         <h2 class="text-lg font-semibold text-white mb-4">Live Alerts Feed</h2>
+                         <div class="space-y-4">
+                             <div class="flex items-start">
+                                <div class="p-1.5 bg-yellow-500/20 rounded-full mt-1"><i data-lucide="shield-alert" class="w-4 h-4 text-yellow-400"></i></div>
+                                <div class="ml-3">
+                                    <p class="font-medium text-yellow-400">High Fatigue Detected - Jagannath</p>
+                                    <p class="text-sm text-gray-400">Operator wellness score dropped below 75%. Suggest a 15-minute break.</p>
+                                    <p class="text-xs text-gray-500 mt-1">2 minutes ago</p>
+                                </div>
+                             </div>
+                             <div class="flex items-start">
+                                <div class="p-1.5 bg-red-500/20 rounded-full mt-1"><i data-lucide="wrench" class="w-4 h-4 text-red-400"></i></div>
+                                <div class="ml-3">
+                                    <p class="font-medium text-red-400">Maintenance Warning - Dozer DZ-203</p>
+                                    <p class="text-sm text-gray-400">Hydraulic pressure anomaly detected. Failure predicted in ~20 operating hours.</p>
+                                    <p class="text-xs text-gray-500 mt-1">15 minutes ago</p>
+                                </div>
+                             </div>
+                         </div>
+                    </div>
+                </div>
+
+                <!-- Right Column -->
+                <div class="flex flex-col gap-6">
+                    <!-- Live Fleet Map -->
+                    <div class="card p-6">
+                        <h2 class="text-lg font-semibold text-white mb-4">Live Fleet Map</h2>
+                        <div class="aspect-video bg-gray-900 rounded-md flex items-center justify-center">
+                            <!-- Placeholder for an interactive map -->
+                            <svg class="w-full h-full" viewBox="0 0 200 150" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="200" height="150" fill="#1f2937"/>
+                                <path d="M 10 140 Q 50 100, 90 120 T 180 30" stroke="#4b5563" stroke-width="2" fill="none"/>
+                                <path d="M 20 20 L 70 50 L 50 90 Z" fill="#374151"/>
+                                <circle cx="45" cy="60" r="4" fill="#60a5fa"/>
+                                <circle cx="150" cy="45" r="4" fill="#4ade80"/>
+                                <circle cx="95" cy="110" r="4" fill="#facc15"/>
+                                <circle cx="120" cy="90" r="4" fill="#f87171"/>
+                                <text x="5" y="15" font-family="Inter" font-size="8" fill="#9ca3af">Construction Site A</text>
+                            </svg>
+                        </div>
+                    </div>
+                    <!-- Predictive Maintenance Watchlist -->
+                    <div class="card p-6">
+                        <h2 class="text-lg font-semibold text-white mb-4">Maintenance Watchlist</h2>
+                        <div class="space-y-4">
+                            <!-- Equipment Row (Clickable) -->
+                            <div class="equipment-row flex items-center cursor-pointer p-2 rounded-md hover:bg-gray-700/50" data-equipment-id="1">
+                                <i data-lucide="truck" class="w-5 h-5 text-red-400"></i>
+                                <div class="ml-3 flex-1">
+                                    <p class="font-medium text-white">Dozer DZ-203</p>
+                                    <p class="text-sm text-red-400">Hydraulic System</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="font-semibold text-white">~20 hrs</p>
+                                    <p class="text-xs text-gray-400">RUL</p>
+                                </div>
+                            </div>
+                             <!-- Equipment Row (Clickable) -->
+                            <div class="equipment-row flex items-center cursor-pointer p-2 rounded-md hover:bg-gray-700/50" data-equipment-id="2">
+                                <i data-lucide="truck" class="w-5 h-5 text-yellow-400"></i>
+                                <div class="ml-3 flex-1">
+                                    <p class="font-medium text-white">Loader LD-55</p>
+                                    <p class="text-sm text-yellow-400">Engine Coolant</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="font-semibold text-white">~45 hrs</p>
+                                    <p class="text-xs text-gray-400">RUL</p>
+                                </div>
+                            </div>
+                             <!-- Equipment Row (Clickable) -->
+                            <div class="equipment-row flex items-center cursor-pointer p-2 rounded-md hover:bg-gray-700/50" data-equipment-id="3">
+                                <i data-lucide="truck" class="w-5 h-5 text-green-400"></i>
+                                <div class="ml-3 flex-1">
+                                    <p class="font-medium text-white">Excavator EX-101</p>
+                                    <p class="text-sm text-green-400">Track System</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="font-semibold text-white">~150 hrs</p>
+                                    <p class="text-xs text-gray-400">RUL</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Operator Details Modal -->
+    <div id="operator-modal" class="hidden fixed inset-0 z-50 modal-backdrop flex items-center justify-center p-4">
+        <div class="card w-full max-w-2xl transform transition-all" style="max-height: 90vh;">
+            <div class="p-6">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-xl font-semibold text-white" id="operator-modal-name"></h2>
+                    <button id="close-operator-modal" class="p-1 rounded-full hover:bg-gray-600">
+                        <i data-lucide="x" class="w-5 h-5"></i>
+                    </button>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+                    <div>
+                        <h3 class="font-semibold text-white mb-2">Details</h3>
+                        <div class="space-y-2 text-sm">
+                            <p><strong class="text-gray-400">Equipment:</strong> <span id="operator-modal-equipment"></span></p>
+                            <p><strong class="text-gray-400">Shift Started:</strong> <span id="operator-modal-shift"></span></p>
+                            <p><strong class="text-gray-400">Current Score:</strong> <span id="operator-modal-score" class="font-bold"></span></p>
+                            <p><strong class="text-gray-400">Status:</strong> <span id="operator-modal-status"></span></p>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-white mb-2">Wellness Trend (Last 8 Hours)</h3>
+                        <canvas id="operator-chart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Equipment Details Modal -->
+    <div id="equipment-modal" class="hidden fixed inset-0 z-50 modal-backdrop flex items-center justify-center p-4">
+        <div class="card w-full max-w-3xl transform transition-all" style="max-height: 90vh; overflow-y: auto;">
+            <div class="p-6">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-xl font-semibold text-white" id="equipment-modal-name"></h2>
+                    <button id="close-equipment-modal" class="p-1 rounded-full hover:bg-gray-600">
+                        <i data-lucide="x" class="w-5 h-5"></i>
+                    </button>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4 text-sm">
+                    <div><strong class="text-gray-400">Model:</strong> <span id="equipment-modal-model"></span></div>
+                    <div><strong class="text-gray-400">Operator:</strong> <span id="equipment-modal-operator"></span></div>
+                    <div><strong class="text-gray-400">Status:</strong> <span id="equipment-modal-status"></span></div>
+                </div>
+                <div class="mt-6">
+                     <h3 class="font-semibold text-white mb-2">Sensor Data & Predictions</h3>
+                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div class="card p-4 bg-gray-900/50">
+                            <h4 class="text-center text-sm font-medium text-gray-300 mb-2">Vibration Analysis (g-force)</h4>
+                            <canvas id="equipment-chart-vibration"></canvas>
+                        </div>
+                        <div class="card p-4 bg-gray-900/50">
+                            <h4 class="text-center text-sm font-medium text-gray-300 mb-2">Hydraulic Fluid Temp (°C)</h4>
+                            <canvas id="equipment-chart-temp"></canvas>
+                        </div>
+                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // --- Mock Data ---
+            const operatorData = {
+                1: { name: 'John Doe', equipment: 'Excavator EX-101', shift: '06:00 AM', score: '92%', status: 'Normal', scoreColor: '#4ade80', chartData: [88, 89, 90, 92, 93, 92, 91, 92] },
+                2: { name: 'Jane Smith', equipment: 'Dozer DZ-203', shift: '06:15 AM', score: '74%', status: 'Fatigue Warning', scoreColor: '#facc15', chartData: [85, 82, 80, 78, 77, 75, 76, 74] },
+                3: { name: 'Mike Williams', equipment: 'Crane CR-05', shift: '05:50 AM', score: '88%', status: 'Normal', scoreColor: '#4ade80', chartData: [90, 91, 89, 88, 87, 88, 89, 88] },
+                4: { name: 'Sarah Brown', equipment: 'Loader LD-55', shift: '07:00 AM', score: '62%', status: 'High Stress', scoreColor: '#f87171', chartData: [75, 72, 70, 68, 65, 64, 63, 62] },
+                5: { name: 'David Jones', equipment: 'Grader GR-78', shift: '06:30 AM', score: '95%', status: 'Normal', scoreColor: '#4ade80', chartData: [92, 93, 94, 95, 94, 95, 95, 95] },
+            };
+
+            const equipmentData = {
+                1: { name: 'Dozer DZ-203', model: 'Caterpillar D6', operator: 'Jane Smith', status: 'Warning', vibrationData: [0.5, 0.6, 0.5, 0.7, 1.2, 1.8, 2.1, 2.5], tempData: [85, 86, 88, 90, 91, 94, 95, 96] },
+                2: { name: 'Loader LD-55', model: 'Komatsu WA380', operator: 'Sarah Brown', status: 'Watch', vibrationData: [0.4, 0.4, 0.5, 0.6, 0.5, 0.7, 0.6, 0.8], tempData: [90, 91, 92, 95, 96, 95, 97, 98] },
+                3: { name: 'Excavator EX-101', model: 'Volvo EC220E', operator: 'John Doe', status: 'Healthy', vibrationData: [0.2, 0.3, 0.2, 0.3, 0.4, 0.3, 0.2, 0.3], tempData: [78, 79, 80, 81, 80, 82, 81, 80] },
+            };
+
+            // --- Modal Handling ---
+            const operatorModal = document.getElementById('operator-modal');
+            const equipmentModal = document.getElementById('equipment-modal');
+            let operatorChartInstance, vibrationChartInstance, tempChartInstance;
+
+            // --- Operator Modal ---
+            document.querySelectorAll('.operator-row').forEach(row => {
+                row.addEventListener('click', () => {
+                    const id = row.dataset.operatorId;
+                    const data = operatorData[id];
+                    
+                    document.getElementById('operator-modal-name').textContent = data.name;
+                    document.getElementById('operator-modal-equipment').textContent = data.equipment;
+                    document.getElementById('operator-modal-shift').textContent = data.shift;
+                    const scoreEl = document.getElementById('operator-modal-score');
+                    scoreEl.textContent = data.score;
+                    scoreEl.style.color = data.scoreColor;
+                    const statusEl = document.getElementById('operator-modal-status');
+                    statusEl.textContent = data.status;
+                    statusEl.style.color = data.scoreColor;
+
+                    const ctx = document.getElementById('operator-chart').getContext('2d');
+                    if(operatorChartInstance) operatorChartInstance.destroy();
+                    operatorChartInstance = createChart(ctx, data.chartData, 'Wellness Score', data.scoreColor);
+                    
+                    operatorModal.classList.remove('hidden');
+                });
+            });
+
+            // --- Equipment Modal ---
+            document.querySelectorAll('.equipment-row').forEach(row => {
+                row.addEventListener('click', () => {
+                    const id = row.dataset.equipmentId;
+                    const data = equipmentData[id];
+
+                    document.getElementById('equipment-modal-name').textContent = data.name;
+                    document.getElementById('equipment-modal-model').textContent = data.model;
+                    document.getElementById('equipment-modal-operator').textContent = data.operator;
+                    const statusEl = document.getElementById('equipment-modal-status');
+                    statusEl.textContent = data.status;
+                    statusEl.style.color = data.status === 'Warning' ? '#f87171' : data.status === 'Watch' ? '#facc15' : '#4ade80';
+
+                    const vibrationCtx = document.getElementById('equipment-chart-vibration').getContext('2d');
+                    const tempCtx = document.getElementById('equipment-chart-temp').getContext('2d');
+
+                    if(vibrationChartInstance) vibrationChartInstance.destroy();
+                    if(tempChartInstance) tempChartInstance.destroy();
+
+                    vibrationChartInstance = createChart(vibrationCtx, data.vibrationData, 'G-Force', '#60a5fa');
+                    tempChartInstance = createChart(tempCtx, data.tempData, '°C', '#f87171');
+                    
+                    equipmentModal.classList.remove('hidden');
+                });
+            });
+
+            // --- Close Modals ---
+            const closeAllModals = () => {
+                operatorModal.classList.add('hidden');
+                equipmentModal.classList.add('hidden');
+            };
+
+            document.getElementById('close-operator-modal').addEventListener('click', closeAllModals);
+            document.getElementById('close-equipment-modal').addEventListener('click', closeAllModals);
+            operatorModal.addEventListener('click', (e) => { if(e.target === operatorModal) closeAllModals(); });
+            equipmentModal.addEventListener('click', (e) => { if(e.target === equipmentModal) closeAllModals(); });
+
+            // --- Chart Creation Utility ---
+            function createChart(ctx, data, label, color) {
+                const gradient = ctx.createLinearGradient(0, 0, 0, 150);
+                gradient.addColorStop(0, `${color}40`); // 25% opacity
+                gradient.addColorStop(1, `${color}00`); // 0% opacity
+
+                return new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: ['-8h', '-7h', '-6h', '-5h', '-4h', '-3h', '-2h', 'Now'],
+                        datasets: [{
+                            label: label,
+                            data: data,
+                            borderColor: color,
+                            borderWidth: 2,
+                            pointBackgroundColor: color,
+                            pointRadius: 3,
+                            fill: true,
+                            backgroundColor: gradient,
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            y: { 
+                                beginAtZero: false,
+                                grid: { color: '#374151' },
+                                ticks: { color: '#9ca3af', font: { size: 10 } }
+                            },
+                            x: {
+                                grid: { display: false },
+                                ticks: { color: '#9ca3af', font: { size: 10 } }
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
